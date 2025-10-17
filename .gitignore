@@ -1,0 +1,98 @@
+# ======================
+# Global ignores
+# ======================
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ======================
+# Python / Django
+# ======================
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.pyenv/
+*.egg-info/
+.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django stuff:
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static/
+*.pid
+
+# Migrations (optional — include only if you auto-generate)
+**/migrations/__pycache__/
+# Uncomment next line if you don't want migrations tracked
+# **/migrations/*
+
+# Local Django settings
+backend/**/local_settings.py
+backend/**/.env
+.env
+
+# ======================
+# Node / Vite / React
+# ======================
+# Dependencies
+UI/node_modules/
+
+# Build output
+UI/dist/
+UI/build/
+
+# Logs
+UI/npm-debug.log*
+UI/yarn-debug.log*
+UI/yarn-error.log*
+UI/pnpm-debug.log*
+
+# Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Environment files
+UI/.env
+UI/.env.local
+UI/.env.development.local
+UI/.env.test.local
+UI/.env.production.local
+
+# Mac/Linux specific
+*.DS_Store
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ======================
+# Coverage / Reports
+# ======================
+htmlcov/
+.coverage
+.coverage.*
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+*.hypothesis/
+.pytest_cache/
