@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-(81)=i#$*^t(y(c)!q)o*xt41=%bhc)0!20o4_(1^i7vutp9)t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','183.82.108.168','172.24.128.1','192.168.0.117']
 
 
 # Application definition
@@ -80,10 +80,15 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "phagematch_main",
+        "USER": "digi_postgres_user",
+        "PASSWORD": "postgres",
+        "HOST": "172.24.128.1",
+        "PORT": "5432",
     }
 }
+
 
 
 # Password validation
