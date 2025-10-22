@@ -3,8 +3,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.exceptions import ValidationError
-from .models import User
-from .serializers import RegisterSerializer, MyTokenObtainSerializer, UserReadSerializer,ApproveUserSerializer
+from .models import User,Role,AffiliatedOrganization
+from .serializers import RegisterSerializer, MyTokenObtainSerializer, UserReadSerializer,ApproveUserSerializer,RoleSerializer,AffiliatedOrgSerializer
 
 def get_first_error_message(errors):
     if isinstance(errors, dict):
@@ -67,7 +67,7 @@ class NonAdminUserListView(generics.ListAPIView):
         if not request.user.role or request.user.role.name.lower() != "admin":
             return Response(
                 {"detail": "You do not have permission to access this."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_401_UNAUTHORIZED
             )
         return super().get(request, *args, **kwargs)
 
@@ -84,7 +84,7 @@ class NonAdminUserDetailView(generics.RetrieveAPIView):
         if not request.user.role or request.user.role.name.lower() != "admin":
             return Response(
                 {"detail": "You do not have permission to access this."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_401_UNAUTHORIZED
             )
         return super().get(request, *args, **kwargs)
     
@@ -98,6 +98,17 @@ class ApproveUserView(generics.UpdateAPIView):
         if not request.user.role or request.user.role.name.lower() != "admin":
             return Response(
                 {"detail": "You do not have permission to approve users."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_401_UNAUTHORIZED
             )
         return super().patch(request, *args, **kwargs)
+    
+class RolesView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+
+
+class AffiliatedOrganizationView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = AffiliatedOrganization.objects.all()
+    serializer_class = AffiliatedOrgSerializer
