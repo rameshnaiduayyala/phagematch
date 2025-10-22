@@ -2,8 +2,20 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.exceptions import ValidationError
 from .models import User
 from .serializers import RegisterSerializer, MyTokenObtainSerializer, UserReadSerializer,ApproveUserSerializer
+
+def get_first_error_message(errors):
+    if isinstance(errors, dict):
+        for field, messages in errors.items():
+            if isinstance(messages, list) and messages:
+                return str(messages[0])
+            elif isinstance(messages, str):
+                return messages
+    elif isinstance(errors, list) and errors:
+        return str(errors[0])
+    return "Invalid input."
 
 # Registration API
 class RegisterView(generics.CreateAPIView):
@@ -30,19 +42,18 @@ class RegisterView(generics.CreateAPIView):
 
 # Login API using JWT
 class LoginView(TokenObtainPairView):
-    """
-    Login an existing user.
-    Expects: email, password
-    Returns: access token + user details
-    """
     serializer_class = MyTokenObtainSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        # serializer.validate already adds user info
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            message = get_first_error_message(e.detail)
+            return Response({"message": message},status=status.HTTP_400_BAD_REQUEST)
 
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    
 # List all non-admin users (role="Admin" only)
 class NonAdminUserListView(generics.ListAPIView):
     serializer_class = UserReadSerializer
