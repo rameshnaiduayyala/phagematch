@@ -5,8 +5,8 @@ import ReusableTable from "../components/ReusableTable";
 import { useEffect, useState } from "react";
 import userService from "../service/userService";
 import ModalComp from "../components/ModalComp";
-import { Ellipsis } from "lucide-react";
 import RowActions from "../components/RowActions";
+import { showConfirm } from "../components/Confirm";
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -64,9 +64,9 @@ export default function Dashboard() {
               show: (data) => data.is_approved, // conditional display
             },
             {
-              label: "Custom",
+              label: "Approve",
               className: "bg-purple-600 text-white hover:bg-purple-700",
-              onClick: (data) => console.log("Custom Action", data),
+              onClick: (data) => handleApprove(data.id),
               show: (data) => !data.is_approved,
             },
           ]}
@@ -74,6 +74,28 @@ export default function Dashboard() {
       ),
     },
   ];
+
+  async function handleApprove(userId) {
+    const confirmed = await showConfirm({
+      title: "Approve User",
+      message: "Are you sure you want to approve this user?",
+      okText: "Approve",
+      cancelText: "Cancel",
+      variant: "ok",
+    });
+
+    if (confirmed) {
+      try {
+        const response = await userService.ApproveUser(userId);
+        console.log("User approved:", response);
+        getAllUsers(); // Refresh the user list
+      } catch (error) {
+        console.error("Error approving user:", error);
+      }
+    } else {
+      console.log("User canceled.");
+    }
+  }
 
   const getAllUsers = async () => {
     try {
