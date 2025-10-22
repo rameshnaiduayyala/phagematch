@@ -8,10 +8,10 @@ export default function SidebarMenu({ collapsed }) {
   return (
     <Sidebar
       collapsed={collapsed}
-      backgroundColor="#1f2937"
+      backgroundColor="#ffffff"
       rootStyles={{
-        color: "white",
-        borderRight: "1px solid #374151",
+        color: "#111827",
+        borderRight: "1px solid #e5e7eb",
         width: "16rem",
         height: "100vh",
         position: "fixed",
@@ -20,15 +20,17 @@ export default function SidebarMenu({ collapsed }) {
         display: "flex",
         flexDirection: "column",
         zIndex: 50,
+        fontFamily: "Inter, sans-serif",
       }}
     >
       {/* Logo / Header */}
-      <div className="h-16 flex items-center justify-center border-b border-gray-700 text-lg font-semibold flex-shrink-0">
+      <div className="h-16 flex items-center justify-center border-b border-gray-200 text-lg font-semibold text-gray-900 bg-white flex-shrink-0">
         {collapsed ? (
-          <Bot />
+          <Bot className="text-gray-700" />
         ) : (
-          <div className="flex items-center space-x-4 gap-2">
-            <Bot /> PageMatch
+          <div className="flex items-center space-x-3">
+            <Bot className="text-gray-700" />
+            <span>PageMatch</span>
           </div>
         )}
       </div>
@@ -38,13 +40,25 @@ export default function SidebarMenu({ collapsed }) {
         <Menu
           menuItemStyles={{
             button: {
-              "&.active": {
-                backgroundColor: "#374151",
-                color: "#60a5fa",
-              },
+              padding: "10px 16px",
+              fontSize: "0.95rem",
+              fontWeight: 500,
+              color: "#374151",
+              borderRadius: "8px",
+              margin: "4px 8px",
+              transition: "all 0.2s ease",
               "&:hover": {
-                backgroundColor: "#4b5563",
+                backgroundColor: "#f3f4f6",
+                color: "#111827",
               },
+              "&.active": {
+                backgroundColor: "#e0f2fe",
+                color: "#0369a1",
+                fontWeight: 600,
+              },
+            },
+            icon: {
+              color: "#6b7280",
             },
           }}
         >
@@ -69,6 +83,11 @@ export default function SidebarMenu({ collapsed }) {
             <MenuItem>Line Charts</MenuItem>
           </SubMenu>
         </Menu>
+      </div>
+
+      {/* Footer or Version */}
+      <div className="p-4 border-t border-gray-200 text-xs text-gray-500 text-center">
+        v1.0.0
       </div>
     </Sidebar>
   );

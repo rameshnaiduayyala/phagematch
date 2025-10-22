@@ -11,11 +11,11 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email === "ayyalarameshnaidu@gmail.com" && password === "123456") {
+    if (email === "admin@gmail.com" && password === "123456") {
       localStorage.setItem("token", "mock-jwt-token");
       navigate("/dashboard");
     } else {
-      alert("Invalid credentials");
+      alert("Invalid credentials provided.");
     }
   };
 

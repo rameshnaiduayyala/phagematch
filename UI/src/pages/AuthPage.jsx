@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import CustomDropdown from "../components/Dropdown";
+import authService from "../service/authService";
+import roleService from "../service/roleSerice";
+import affilatedOrganizationService from "../service/affilatedOrganizationService";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -12,23 +15,48 @@ export default function AuthPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState(null);
+  const [roles, setRoles] = useState([]);
+  const [organization, setOrganization] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [affiliatedOrgs, setAffiliatedOrgs] = useState([]);
 
   if (token) return <Navigate to="/dashboard" replace />;
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email === "techrammy@gmail.com" && password === "123456") {
-      localStorage.setItem("token", "mock-jwt-token");
+    const response = await authService.Login(email, password);
+
+    if (response && !response.error) {
+      toast.success("Login successful!");
+      localStorage.setItem("token", response.access);
+      localStorage.setItem("user", JSON.stringify(response.user));
       navigate("/dashboard");
     } else {
-      toast.error("Invalid credentials");
+      toast.error(response.error);
     }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    alert(`Registered ${name} with email ${email}`);
-    setIsLogin(true);
+    const response = await authService.RegisterNewUser(
+      name,
+      email,
+      mobileNumber,
+      password,
+      confirmPassword,
+      role,
+      organization
+    );
+
+    if (response && !response.error) {
+      toast.success("Registration successful!");
+      setIsLogin(true);
+    } else {
+      console.log(response.error);
+      toast.error(response.error);
+    }
   };
 
   const formVariants = {
@@ -37,10 +65,39 @@ export default function AuthPage() {
     exit: { opacity: 0, y: -20 },
   };
 
-  const options = [
-    { value: "user", label: "User" },
-    { value: "admin", label: "Admin" },
+  const roleOptions = [...roles.map((r) => ({ value: r.id, label: r.name }))];
+  const organizationOptions = [
+    ...affiliatedOrgs.map((org) => ({ value: org.id, label: org.name })),
   ];
+
+  useEffect(() => {
+    document.title = isLogin ? "Login - PageMatch" : "Register - PageMatch";
+
+    // Fetch roles on component mount
+    const fetchRoles = async () => {
+      const response = await roleService.GetRoles();
+      if (response && !response.error) {
+        setRoles(response);
+      } else {
+        toast.error("Failed to fetch roles");
+      }
+    };
+
+    const fetchAffiliatedOrgs = async () => {
+      const response =
+        await affilatedOrganizationService.GetAffilatedOrganizations();
+      if (response && !response.error) {
+        setAffiliatedOrgs(response);
+      }
+    };
+
+    if (!isLogin) {
+      fetchRoles();
+      fetchAffiliatedOrgs();
+    } else {
+      setRole(null);
+    }
+  }, [isLogin]);
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900 font-sans">
@@ -80,6 +137,7 @@ export default function AuthPage() {
 
               <input
                 type="email"
+                name="email"
                 placeholder="Email"
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
                 value={email}
@@ -89,6 +147,7 @@ export default function AuthPage() {
 
               <input
                 type="password"
+                name="password"
                 placeholder="Password"
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
                 value={password}
@@ -122,49 +181,91 @@ export default function AuthPage() {
               animate="visible"
               exit="exit"
               transition={{ duration: 0.4 }}
-              className="w-full max-w-sm space-y-6"
+              className="w-full max-w-lg space-y-3 bg-white p-4 rounded-2xl shadow-lg"
             >
               <h2 className="text-3xl font-semibold text-gray-900 text-center">
                 Create account
               </h2>
               <p className="text-center text-gray-500">Start your journey</p>
 
-              <CustomDropdown
-                options={options}
-                placeholder="Select Role"
-                wrapperClass="w-full"
-                buttonClass="w-full p-3 rounded-md border border-gray-300 text-gray-900 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black"
-                menuClass="bg-white border border-gray-200 rounded-md shadow-sm"
-                itemClass="text-gray-800"
-              />
+              {/* Dropdowns Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Role Dropdown */}
+                <CustomDropdown
+                  options={roleOptions}
+                  placeholder="Select Role"
+                  value={role}
+                  onChange={(val) => setRole(val.value)}
+                  wrapperClass="w-full"
+                  buttonClass="w-full p-3 rounded-md border border-gray-300 text-gray-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
+                  menuClass="bg-white border border-gray-200 rounded-md shadow-sm"
+                  itemClass="text-gray-800 hover:bg-gray-100 px-3 py-2 cursor-pointer"
+                />
 
+                {/* Organization Dropdown */}
+                <CustomDropdown
+                  options={organizationOptions}
+                  placeholder="Select Organization"
+                  value={organization}
+                  onChange={(val) => setOrganization(val.value)}
+                  wrapperClass="w-full"
+                  buttonClass="w-full p-3 rounded-md border border-gray-300 text-gray-900 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
+                  menuClass="bg-white border border-gray-200 rounded-md shadow-sm"
+                  itemClass="text-gray-800 hover:bg-gray-100 px-3 py-2 cursor-pointer"
+                />
+              </div>
+
+              {/* Full Name */}
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
+                className="w-full p-3 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
 
+              {/* Email */}
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
+                className="w-full p-3 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
 
+              {/* Phone */}
+              <input
+                type="tel"
+                placeholder="Phone"
+                className="w-full p-3 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
+                value={mobileNumber}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                required
+              />
+
+              {/* Password */}
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
+                className="w-full p-3 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
+              {/* Confirm Password */}
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                className="w-full p-3 rounded-md border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+
+              {/* Submit Button */}
               <button
                 type="submit"
                 className="w-full py-3 bg-black text-white rounded-md font-medium hover:bg-gray-900 transition-colors"
