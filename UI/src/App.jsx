@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/dashboard/*" element={<DashboardLayout />}>
           {/* Each role dashboard */}
           <Route
-            path="Admin"
+            path="admin"
             element={<ProtectedRoute allowedRoles={[]} />}
           >
             <Route index element={<AdminDashboard />} />

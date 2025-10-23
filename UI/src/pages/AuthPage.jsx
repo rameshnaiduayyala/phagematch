@@ -36,7 +36,7 @@ export default function AuthPage() {
       const role = response.user?.role_slug;
 
       switch (role) {
-        case "Admin":
+        case "admin":
           navigate("/dashboard/admin");
           break;
         case "hospital_clinician":
