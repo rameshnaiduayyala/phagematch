@@ -9,7 +9,7 @@ export default function ProtectedRoute({ allowedRoles = [] }) {
   }
 
   // 🧠 if allowedRoles empty → allow all
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role_slug)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

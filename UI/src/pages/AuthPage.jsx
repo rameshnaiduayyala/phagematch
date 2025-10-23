@@ -24,34 +24,38 @@ export default function AuthPage() {
 
   if (token) return <Navigate to="/dashboard" replace />;
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  const response = await authService.Login(email, password);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await authService.Login(email, password);
 
-  if (response && !response.error) {
-    toast.success("Login successful!");
-    localStorage.setItem("token", response.access);
-    localStorage.setItem("user", JSON.stringify(response.user));
+    if (response && !response.error) {
+      toast.success("Login successful!");
+      localStorage.setItem("token", response.access);
+      localStorage.setItem("user", JSON.stringify(response.user));
 
-    const role = response.user?.role;
+      const role = response.user?.role_slug;
 
-    switch (role) {
-      case "Admin":
-        navigate("/dashboard/admin");
-        break;
-      case "manager":
-        navigate("/dashboard/manager");
-        break;
-      case "user":
-      default:
-        navigate("/dashboard/researcher");
-        break;
+      switch (role) {
+        case "Admin":
+          navigate("/dashboard/admin");
+          break;
+        case "hospital_clinician":
+          navigate("/dashboard/clinician");
+          break;
+        case "ccmb_researcher":
+          navigate("/dashboard/researcher");
+          break;
+        case "ncdc_icmr_official":
+          navigate("/dashboard/icmr");
+          break;
+        default:
+          navigate("/dashboard/researcher");
+          break;
+      }
+    } else {
+      toast.error(response.error);
     }
-  } else {
-    toast.error(response.error);
-  }
-};
-
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
