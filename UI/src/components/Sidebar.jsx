@@ -9,6 +9,7 @@ import {
   Database,
   FileText,
   Bot,
+  IdCardLanyard,
 } from "lucide-react";
 import { sidebarMenus } from "../utils/sidebarMenus";
 
@@ -19,6 +20,8 @@ const iconMap = {
   Reports: <FileText size={18} />,
   "Master Dashboard": <Database size={18} />,
   "All Patients": <ClipboardList size={18} />,
+  Appointments: <Activity size={18} />,
+  Users: <IdCardLanyard size={18} />,
 };
 
 export default function SidebarMenu({ collapsed, userRole }) {

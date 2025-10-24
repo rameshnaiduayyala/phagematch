@@ -9,7 +9,7 @@ export default function DashboardLayout() {
   const { user } = useAuthStore();
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900 font-sans">
+    <div className="flex min-h-screen bg-gray-100 text-gray-900 font-sans">
       {/* Sidebar */}
       <SidebarMenu collapsed={collapsed} userRole={user?.role_slug} />
 

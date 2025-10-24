@@ -2,9 +2,10 @@ import { ROLE_SLUGS } from "../constants/roles";
 
 export const sidebarMenus = {
   [ROLE_SLUGS.admin]: [
-    { name: "Master Dashboard", path: "/admin/dashboard" },
+    { name: "Master Dashboard", path: "/dashboard/admin" },
     { name: "All Patients", path: "/admin/patients" },
     { name: "Reports", path: "/admin/reports" },
+    { name: "Users", path: "/dashboard/users" },
   ],
   [ROLE_SLUGS.hospital_clinician]: [
     { name: "Dashboard", path: "/dashboard/clinician" },

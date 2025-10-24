@@ -9,10 +9,10 @@ const GetAllUsers = async () => {
   }
 };
 
-const ApproveUser = async (userId) => {
+const ApproveUser = async (userId, is_approved) => {
   try {
     const response = await api.patch(`/users/${userId}/approve/`, {
-      is_approved: true,
+      is_approved: is_approved,
     });
     return response.data;
   } catch (error) {

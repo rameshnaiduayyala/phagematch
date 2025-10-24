@@ -10,6 +10,7 @@ import Settings from "./pages/Settings";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ClinicianPatientList from "./pages/clinicianDashbaord/ClinicianPatientList";
+import Users from "./pages/adminDashboard/UserList";
 
 export default function App() {
   return (
@@ -23,25 +24,18 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard/*" element={<DashboardLayout />}>
           {/* Each role dashboard */}
-          <Route
-            path="admin"
-            element={<ProtectedRoute allowedRoles={[]} />}
-          >
+          <Route path="admin" element={<ProtectedRoute allowedRoles={[]} />}>
             <Route index element={<AdminDashboard />} />
           </Route>
+          <Route path="users" element={<Users />} />
 
-          <Route
-            path="icmr"
-            element={<ProtectedRoute allowedRoles={[]} />}
-          >
+          <Route path="icmr" element={<ProtectedRoute allowedRoles={[]} />}>
             <Route index element={<IcmrDashboard />} />
           </Route>
 
           <Route
             path="clinician/*"
-            element={
-              <ProtectedRoute allowedRoles={[]} />
-            }
+            element={<ProtectedRoute allowedRoles={[]} />}
           >
             <Route index element={<ClinicianDashboard />} />
             <Route path="patients" element={<ClinicianPatientList />} />
@@ -49,9 +43,7 @@ export default function App() {
 
           <Route
             path="researcher"
-            element={
-              <ProtectedRoute allowedRoles={[]} />
-            }
+            element={<ProtectedRoute allowedRoles={[]} />}
           >
             <Route index element={<ResearcherDashboard />} />
           </Route>
