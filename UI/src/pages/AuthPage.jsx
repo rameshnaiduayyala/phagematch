@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "react-toastify";
+import { toast } from "sonner"
 import CustomDropdown from "../components/Dropdown";
 import authService from "../service/authService";
 import roleService from "../service/roleSerice";
 import affilatedOrganizationService from "../service/affilatedOrganizationService";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function AuthPage() {
   const [organization, setOrganization] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [affiliatedOrgs, setAffiliatedOrgs] = useState([]);
+  const { setUser, setToken } = useAuthStore();
 
   if (token) return <Navigate to="/dashboard" replace />;
 
@@ -30,22 +32,22 @@ export default function AuthPage() {
 
     if (response && !response.error) {
       toast.success("Login successful!");
-      localStorage.setItem("token", response.access);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      setUser(response.user);
+      setToken(response.access);
 
       const role = response.user?.role_slug;
 
       switch (role) {
-        case "admin":
+        case "ADMIN":
           navigate("/dashboard/admin");
           break;
-        case "hospital_clinician":
+        case "HOSPITAL_CLINICIAN":
           navigate("/dashboard/clinician");
           break;
-        case "ccmb_researcher":
+        case "CCMB_RESEARCHER":
           navigate("/dashboard/researcher");
           break;
-        case "ncdc_icmr_official":
+        case "NCDC_ICMR_OFFICIAL":
           navigate("/dashboard/icmr");
           break;
         default:

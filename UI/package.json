@@ -21,11 +21,13 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropdown": "^1.11.0",
+    "react-form-stepper": "^2.0.3",
     "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^7.9.4",
     "react-toastify": "^11.0.5",
     "recharts": "^3.2.1",
-    "sonner": "^2.0.7"
+    "sonner": "^2.0.7",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

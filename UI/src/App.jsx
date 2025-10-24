@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ClinicianPatientList from "./pages/clinicianDashbaord/ClinicianPatientList";
 
 export default function App() {
   return (
@@ -37,12 +38,13 @@ export default function App() {
           </Route>
 
           <Route
-            path="clinician"
+            path="clinician/*"
             element={
               <ProtectedRoute allowedRoles={[]} />
             }
           >
             <Route index element={<ClinicianDashboard />} />
+            <Route path="patients" element={<ClinicianPatientList />} />
           </Route>
 
           <Route

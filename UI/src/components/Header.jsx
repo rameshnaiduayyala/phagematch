@@ -1,9 +1,10 @@
-import { Menu, ChevronDown } from "lucide-react";
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
+import { Menu,ChevronDown, User, Settings, LogOut, Shield} from "lucide-react";
+
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function Header({ onToggleSidebar }) {
-  const { user, logout } = useContext(AuthContext);
+  // const { user, logout } = useContext(AuthContext);
+   const { user, logout } = useAuthStore();
 
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-40">
@@ -16,45 +17,53 @@ export default function Header({ onToggleSidebar }) {
         >
           <Menu size={22} className="text-gray-700" />
         </button>
-        <h1 className="text-xl font-semibold text-gray-800 tracking-tight">
-          Dashboard
-        </h1>
       </div>
 
       {/* Right: User avatar and actions */}
       <div className="flex items-center space-x-4">
         {/* User dropdown */}
+
         <div className="relative group">
-          <button className="flex items-center space-x-2 bg-gray-50 hover:bg-gray-100 px-3 py-1 rounded-full transition-all">
+          {/* Profile Button */}
+          <button className="flex items-center space-x-3 bg-white hover:bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 transition-all shadow-sm">
             <img
-              src="https://i.pravatar.cc/40"
+              src={user?.avatar || "https://i.pravatar.cc/40"}
               alt="User Avatar"
-              className="w-8 h-8 rounded-full border border-gray-200"
+              className="w-9 h-9 rounded-full border border-gray-200 object-cover"
             />
-            <span className="text-gray-800 font-medium hidden md:block">
-              {user ? user.name : "Guest"}
-            </span>
+            <div className="hidden md:flex flex-col items-start text-left">
+              <span className="text-gray-900 text-sm font-medium leading-tight">
+                {user?.name || "Guest User"}
+              </span>
+              <span className="text-xs text-gray-500 flex items-center space-x-1">
+                <Shield size={12} className="text-blue-500" />
+                <span className="capitalize">{user?.role || "Loading..."}</span>
+              </span>
+            </div>
             <ChevronDown size={16} className="text-gray-600" />
           </button>
 
-          {/* Dropdown menu */}
-          <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
-            <ul className="flex flex-col p-2">
+          {/* Dropdown Menu */}
+          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
+            <ul className="flex flex-col py-2">
               <li>
-                <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md text-gray-800">
+                <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <User size={16} className="mr-2 text-gray-500" />
                   Profile
                 </button>
               </li>
               <li>
-                <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md text-gray-800">
+                <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <Settings size={16} className="mr-2 text-gray-500" />
                   Settings
                 </button>
               </li>
               <li>
                 <button
                   onClick={logout}
-                  className="w-full text-left px-3 py-2 hover:bg-red-50 text-red-600 rounded-md transition-colors"
+                  className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                 >
+                  <LogOut size={16} className="mr-2" />
                   Logout
                 </button>
               </li>

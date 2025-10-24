@@ -6,15 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfirmRoot } from "./components/Confirm";
+import { Toaster } from "./components/ui/sonner";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <App />
-        <ConfirmRoot /> 
+        <ConfirmRoot />
       </AuthProvider>
       <ToastContainer />
+      <Toaster />
     </BrowserRouter>
   </StrictMode>
 );

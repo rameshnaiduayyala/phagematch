@@ -7,6 +7,7 @@ import userService from "../service/userService";
 import ModalComp from "../components/ModalComp";
 import RowActions from "../components/RowActions";
 import { showConfirm } from "../components/Confirm";
+import { toast } from "sonner"
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -55,7 +56,7 @@ export default function Dashboard() {
             {
               label: "Edit",
               className: "bg-blue-600 text-white hover:bg-blue-700",
-              onClick: (data) => console.log("Edit", data),
+              onClick: () => toast.success("Event has been created."),
             },
             {
               label: "Delete",

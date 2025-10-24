@@ -2,14 +2,16 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import SidebarMenu from "../components/Sidebar";
 import Header from "../components/Header";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useAuthStore();
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900 font-sans">
       {/* Sidebar */}
-      <SidebarMenu collapsed={collapsed} />
+      <SidebarMenu collapsed={collapsed} userRole={user?.role_slug} />
 
       {/* Main Content */}
       <div

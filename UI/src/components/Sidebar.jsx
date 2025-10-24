@@ -1,36 +1,54 @@
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Info, BarChart2, Bot } from "lucide-react";
+import {
+  Home,
+  Users,
+  BarChart2,
+  Activity,
+  ClipboardList,
+  Database,
+  FileText,
+  Bot,
+} from "lucide-react";
+import { sidebarMenus } from "../utils/sidebarMenus";
 
-export default function SidebarMenu({ collapsed }) {
+const iconMap = {
+  Dashboard: <Home size={18} />,
+  Patients: <Users size={18} />,
+  Analytics: <BarChart2 size={18} />,
+  Reports: <FileText size={18} />,
+  "Master Dashboard": <Database size={18} />,
+  "All Patients": <ClipboardList size={18} />,
+};
+
+export default function SidebarMenu({ collapsed, userRole }) {
   const location = useLocation();
+  const menus = sidebarMenus[userRole] || [];
 
   return (
     <Sidebar
       collapsed={collapsed}
-      backgroundColor="#ffffff"
+      breakPoint="md"
+      transitionDuration={300}
+      backgroundColor="#fff"
       rootStyles={{
         color: "#111827",
-        borderRight: "1px solid #e5e7eb",
         width: "16rem",
-        height: "100vh",
         position: "fixed",
-        top: 0,
         left: 0,
-        display: "flex",
-        flexDirection: "column",
+        height: "100vh",
         zIndex: 50,
-        fontFamily: "Inter, sans-serif",
+        borderRight: "1px solid #e5e7eb",
       }}
     >
-      {/* Logo / Header */}
+      {/* Header */}
       <div className="h-16 flex items-center justify-center border-b border-gray-200 text-lg font-semibold text-gray-900 bg-white flex-shrink-0">
         {collapsed ? (
           <Bot className="text-gray-700" />
         ) : (
           <div className="flex items-center space-x-3">
             <Bot className="text-gray-700" />
-            <span>PageMatch</span>
+            <span>PhageTrack</span>
           </div>
         )}
       </div>
@@ -51,43 +69,31 @@ export default function SidebarMenu({ collapsed }) {
                 backgroundColor: "#f3f4f6",
                 color: "#111827",
               },
-              "&.active": {
+              "&.ps-active": {
                 backgroundColor: "#e0f2fe",
                 color: "#0369a1",
                 fontWeight: 600,
               },
             },
-            icon: {
-              color: "#6b7280",
-            },
+            icon: { color: "#6b7280" },
           }}
         >
-          <MenuItem
-            icon={<Home size={18} />}
-            routerLink={<Link to="/dashboard" />}
-            className={location.pathname === "/dashboard" ? "active" : ""}
-          >
-            Dashboard
-          </MenuItem>
-
-          <MenuItem
-            icon={<Info size={18} />}
-            routerLink={<Link to="/about" />}
-            className={location.pathname === "/about" ? "active" : ""}
-          >
-            About
-          </MenuItem>
-
-          <SubMenu label="Charts" icon={<BarChart2 size={18} />}>
-            <MenuItem>Pie Charts</MenuItem>
-            <MenuItem>Line Charts</MenuItem>
-          </SubMenu>
+          {menus.map((item) => (
+            <MenuItem
+              key={item.path}
+              icon={iconMap[item.name] || <Activity size={18} />}
+              component={<Link to={item.path} />}
+              active={location.pathname === item.path}
+            >
+              {item.name}
+            </MenuItem>
+          ))}
         </Menu>
       </div>
 
-      {/* Footer or Version */}
+      {/* Footer */}
       <div className="p-4 border-t border-gray-200 text-xs text-gray-500 text-center">
-        v1.0.0
+        {collapsed ? "v1.0" : "v1.0.0"}
       </div>
     </Sidebar>
   );
