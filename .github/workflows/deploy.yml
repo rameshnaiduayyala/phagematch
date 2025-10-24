@@ -20,4 +20,4 @@ jobs:
           username: ${{ secrets.WINDOWS_USER }}
           key: ${{ secrets.WINDOWS_SSH_KEY }}
           script: |
-            powershell.exe -ExecutionPolicy Bypass -File "D:\Projects\MyProject\deploy.ps1"
+            powershell.exe -ExecutionPolicy Bypass -File "C:\nginx\deploy.ps1"
