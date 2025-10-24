@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfirmRoot } from "./components/Confirm";
 import { Toaster } from "./components/ui/sonner";
+// import GlobalLoader from "./components/GlobalLoader";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <App />
         <ConfirmRoot />
+        {/* <GlobalLoader /> */}
       </AuthProvider>
       <ToastContainer />
       <Toaster />

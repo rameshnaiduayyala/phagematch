@@ -1,8 +1,3 @@
-// ReusableTable.jsx
-// Single-file reusable TanStack Table (v8) component styled with Tailwind CSS
-// Install:
-// npm install @tanstack/react-table classnames
-
 import React from "react";
 import {
   useReactTable,
@@ -13,6 +8,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { Loader2 } from "lucide-react";
+import useGlobalStore from "../stores/loaderStore";
 
 /**
  * Props
@@ -142,9 +139,14 @@ export default function ReusableTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="p-6 text-center text-sm text-gray-500"
+                  className="p-6 text-center text-gray-500"
                 >
-                  No records found
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <Loader2 className="w-6 h-6 animate-spin text-sky-500" />
+                    <span className="text-sm font-medium text-sky-600">
+                      Loading data...
+                    </span>
+                  </div>
                 </td>
               </tr>
             ) : (

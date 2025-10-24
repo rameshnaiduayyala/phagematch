@@ -3,8 +3,24 @@ import LineChart from "../components/LineChart";
 import PieChart from "../components/PieChart";
 import ModalComp from "../components/ModalComp";
 import UserList from "./adminDashboard/UserList";
+import { useEffect, useState } from "react";
+import userService from "../service/userService";
 
 export default function Dashboard() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await userService.GetAllUsers();
+        setUsers(response);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    getUsers();
+  }, []);
+
   return (
     <>
       <div className="min-h-screen bg-gray-100 text-gray-800 font-sans">
@@ -14,14 +30,30 @@ export default function Dashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <StatsCard title="Tickets Open" value={128} color="bg-blue-200" />
-          <StatsCard title="Tickets Closed" value={432} color="bg-green-200" />
+          <StatsCard
+            title="Tickets Open"
+            value={128}
+            color="bg-blue-200"
+            anmation
+          />
+          <StatsCard
+            title="Tickets Closed"
+            value={432}
+            color="bg-green-200"
+            anmation
+          />
           <StatsCard
             title="Pending Requests"
             value={56}
             color="bg-yellow-200"
+            anmation
           />
-          <StatsCard title="New Users" value={24} color="bg-purple-200" />
+          <StatsCard
+            title="Users"
+            value={users?.length}
+            color="bg-purple-200 trabslate"
+            anmation
+          />
         </div>
 
         {/* Charts */}
