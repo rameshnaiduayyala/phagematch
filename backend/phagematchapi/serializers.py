@@ -58,6 +58,7 @@ class MyTokenObtainSerializer(TokenObtainPairSerializer):
             "name": self.user.name,
             "email": self.user.email,
             "role": self.user.role.name if self.user.role else None,
+            "role_slug": self.user.role.role_slug if self.user.role else None,
             "is_admin": self.user.is_admin,
             "is_approved": self.user.is_approved,
             "affiliated_org_id": self.user.affiliated_org.id if self.user.affiliated_org else None,
