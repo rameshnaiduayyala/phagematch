@@ -1,0 +1,23 @@
+name: Deploy React/Django
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to Windows server via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.WINDOWS_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          key: ${{ secrets.WINDOWS_SSH_KEY }}
+          script: |
+            powershell.exe -ExecutionPolicy Bypass -File "D:\Projects\MyProject\deploy.ps1"
