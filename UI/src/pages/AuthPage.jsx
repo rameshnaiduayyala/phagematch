@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import CustomDropdown from "../components/Dropdown";
 import authService from "../service/authService";
 import roleService from "../service/roleSerice";
@@ -86,7 +86,9 @@ export default function AuthPage() {
     exit: { opacity: 0, y: -20 },
   };
 
-  const roleOptions = [...roles.map((r) => ({ value: r.id, label: r.name }))];
+  const roleOptions = roles
+    .filter((r) => r.name.toLowerCase() !== "admin")
+    .map((r) => ({ value: r.id, label: r.name }));
   const organizationOptions = [
     ...affiliatedOrgs.map((org) => ({ value: org.id, label: org.name })),
   ];
