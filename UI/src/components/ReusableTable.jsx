@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { Loader2 } from "lucide-react";
-import useGlobalStore from "../stores/loaderStore";
 
 /**
  * Props

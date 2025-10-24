@@ -10,8 +10,12 @@ import {
   FileText,
   Bot,
   IdCardLanyard,
+  LogOut,
 } from "lucide-react";
 import { sidebarMenus } from "../utils/sidebarMenus";
+import { showConfirm } from "./Confirm";
+import authService from "../service/authService";
+import { toast } from "sonner";
 
 const iconMap = {
   Dashboard: <Home size={18} />,
@@ -28,6 +32,27 @@ export default function SidebarMenu({ collapsed, userRole }) {
   const location = useLocation();
   const menus = sidebarMenus[userRole] || [];
 
+  async function handleLogout() {
+    const confirmed = await showConfirm({
+      message: "Are you sure you want to confirm Logout?",
+      okText: "Logout",
+      cancelText: "Cancel",
+      variant: "delete",
+    });
+
+    if (confirmed) {
+      try {
+        authService.Logout();
+        toast.success("Logged out successfully.");
+      } catch (error) {
+        toast.error("Error logging out. Please try again.");
+        console.error("Error logging out:", error);
+      }
+    } else {
+      console.log("User canceled.");
+    }
+  }
+
   return (
     <Sidebar
       collapsed={collapsed}
@@ -37,9 +62,11 @@ export default function SidebarMenu({ collapsed, userRole }) {
       rootStyles={{
         color: "#111827",
         width: "16rem",
+        height: "100vh",
         position: "fixed",
         left: 0,
-        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
         zIndex: 50,
         borderRight: "1px solid #e5e7eb",
       }}
@@ -56,7 +83,7 @@ export default function SidebarMenu({ collapsed, userRole }) {
         )}
       </div>
 
-      {/* Scrollable Menu */}
+      {/* Menu (scrollable if too long) */}
       <div className="flex-1 overflow-y-auto">
         <Menu
           menuItemStyles={{
@@ -94,9 +121,19 @@ export default function SidebarMenu({ collapsed, userRole }) {
         </Menu>
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200 text-xs text-gray-500 text-center">
-        {collapsed ? "v1.0" : "v1.0.0"}
+      {/* Footer (always stick to bottom) */}
+      <div className="flex-shrink-0 border-t border-gray-200 bg-white p-4 flex flex-col gap-2">
+        <button
+          onClick={handleLogout}
+          className="flex items-center justify-center w-full gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-red-200 rounded-md transition-colors"
+        >
+          <LogOut size={16} className="text-gray-600" />
+          {!collapsed && <span>Logout</span>}
+        </button>
+
+        <div className="text-xs text-gray-400 text-center select-none">
+          {collapsed ? "v1.0" : "Version 1.0"}
+        </div>
       </div>
     </Sidebar>
   );

@@ -99,8 +99,10 @@ const UserList = () => {
 
     if (confirmed) {
       try {
-        const response = await userService.ApproveUser(userId, is_approved);
-        console.log("User approved:", response);
+       await userService.ApproveUser(userId, is_approved);
+        toast.success(`User has been ${
+          is_approved ? "approved" : "inactivated"
+        } successfully.`);
         getAllUsers();
       } catch (error) {
         console.error("Error approving user:", error);

@@ -1,10 +1,16 @@
-import { Menu,ChevronDown, User, Settings, LogOut, Shield} from "lucide-react";
+import {
+  Menu,
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+  Shield,
+} from "lucide-react";
 
 import { useAuthStore } from "../stores/useAuthStore";
 
 export default function Header({ onToggleSidebar }) {
-  // const { user, logout } = useContext(AuthContext);
-   const { user, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-40">
@@ -26,11 +32,17 @@ export default function Header({ onToggleSidebar }) {
         <div className="relative group">
           {/* Profile Button */}
           <button className="flex items-center space-x-3 bg-white hover:bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 transition-all shadow-sm">
-            <img
-              src={user?.avatar || "https://i.pravatar.cc/40"}
-              alt="User Avatar"
-              className="w-9 h-9 rounded-full border border-gray-200 object-cover"
-            />
+            {user?.avatarUrl ? (
+              <img
+                src={user?.avatar}
+                alt="User Avatar"
+                className="w-9 h-9 rounded-full border border-gray-200 object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-gray-600 font-semibold">
+                {user?.name?.charAt(0)}
+              </div>
+            )}
             <div className="hidden md:flex flex-col items-start text-left">
               <span className="text-gray-900 text-sm font-medium leading-tight">
                 {user?.name || "Guest User"}
